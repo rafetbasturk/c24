@@ -72,9 +72,8 @@ $(function() {
             "padding-top": "125px",
             "text-align": "center",
             "color": "var(--l-grayish-blue)"
-        })
+        });
     };
-
 
     $.each(allItems, function(i, x){
         let check = "";
@@ -271,8 +270,8 @@ $(function() {
             if (key === "task") {
                 $("#completedList").append(
                     `<li>
-                        <span class="circle"></span>
-                        <p>${value}</p>
+                        <span class="circle check"></span>
+                        <p class="line">${value}</p>
                         <img class="cross" src="./images/icon-cross.svg" alt="cross">
                     </li>`
                 );
