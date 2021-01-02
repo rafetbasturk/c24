@@ -3,6 +3,21 @@ $(function() {
     let activeItems = [];
     let completedItems = [];
     let id;
+
+    // load theme from local storage
+
+    let theme = localStorage.getItem("theme");
+
+    if (theme === "dark") {
+        $("html").addClass("dark");
+        $("header img").attr({
+            src: "./images/icon-sun.svg",
+            alt: "sun"
+        });
+    }
+
+    // load items from localstorage
+
     let allData = localStorage.getItem("all");
 
     if (allData) {
@@ -49,6 +64,18 @@ $(function() {
         array.forEach(el => el);
     };
 
+    if (allItems.length === 0) {
+        $("#allList, #activeList, #completedList").text("There is no item.").css({
+            "width": "100%",
+            "padding": "0 2rem",
+            "height": "300px",
+            "padding-top": "125px",
+            "text-align": "center",
+            "color": "var(--l-grayish-blue)"
+        })
+    };
+
+
     $.each(allItems, function(i, x){
         let check = "";
         let line = "";
@@ -71,12 +98,20 @@ $(function() {
         });
     });
 
-    const count = allItems.filter(x => x.completed == false).length;
-    if (count <= 1) {
-        $("#left").text(`${count} item left`);
-    } else {
-        $("#left").text(`${count} items left`);
+    // count items function
+
+    function countItems(x) {
+        if (x <= 1) {
+            $("#left").text(`${x} item left`);
+        } else {
+            $("#left").text(`${x} items left`);
+        };
     };
+
+    const count = allItems.filter(x => x.completed == false).length;
+    countItems(count);
+
+    // add new item function
 
     function addNewItem(item) {
         $("#allList").append(
@@ -87,6 +122,8 @@ $(function() {
             </li>`
         );
     };
+
+    // add new item with keydown
 
     $("body").on("keydown", "input", function(e){        
         if (e.key == "Enter" && $(this).val() != ""){
@@ -106,12 +143,10 @@ $(function() {
         };
 
         const count = allItems.filter(x => x.completed == false).length;
-        if (count <= 1) {
-            $("#left").text(`${count} item left`);
-        } else {
-            $("#left").text(`${count} items left`);
-        };
+        countItems(count);
     });
+
+    // complete item
 
     $("body").on("click", ".circle", function(e) {
         let todoText = $(e.currentTarget).parent().children("p").text();
@@ -133,11 +168,7 @@ $(function() {
         location.reload();
 
         const count = allItems.filter(x => x.completed == false).length;
-        if (count <= 1) {
-            $("#left").text(`${count} item left`);
-        } else {
-            $("#left").text(`${count} items left`);
-        };
+        countItems(count);
     });
 
     $("body").on("click", ".completed", function(e) {
@@ -160,12 +191,10 @@ $(function() {
         location.reload();
 
         const count = allItems.filter(x => x.completed == false).length;
-        if (count <= 1) {
-            $("#left").text(`${count} item left`);
-        } else {
-            $("#left").text(`${count} items left`);
-        };
+        countItems(count);
     });
+
+    // delete item
 
     $("body").on("click", ".cross", function(e) {
         let todoText = $(e.currentTarget).parent().children("p").text();
@@ -175,52 +204,28 @@ $(function() {
         });
 
         const count = allItems.filter(x => x.completed == false).length;
-        if (count <= 1) {
-            $("#left").text(`${count} item left`);
-        } else {
-            $("#left").text(`${count} items left`);
-        };
+        countItems(count);
 
         localStorage.setItem("all", JSON.stringify(allItems));
         location.reload();
     });
 
-    $("body").on("click", "#clear", function() {
-        allItems = $.grep(allItems, function (x) {
-            return x.completed != true;
-        });
-
-        $(".check").next().toggleClass("line");
-        $(".check").toggleClass("check");
-
-        const count = allItems.filter(x => x.completed == false).length;
-        if (count <= 1) {
-            $("#left").text(`${count} item left`);
-        } else {
-            $("#left").text(`${count} items left`);
-        };
-        
-
-        localStorage.setItem("all", JSON.stringify(allItems));
-        location.reload();
-    });
+    // "all" tab
 
     $("body").on("click", "#allListBtn", function () {
-        $(this).addClass("active");
-        $("#activeListBtn").removeClass("active");
-        $("#completedListBtn").removeClass("active");
+        $(this).addClass("blue");
+        $("#activeListBtn").removeClass("blue");
+        $("#completedListBtn").removeClass("blue");
 
         $("#allList").slideDown();
         $("#completedList").css("display", "none");
         $("#activeList").css("display", "none");
 
         const count = allItems.filter(x => x.completed == false).length;
-        if (count <= 1) {
-            $("#left").text(`${count} item left`);
-        } else {
-            $("#left").text(`${count} items left`);
-        };
-    })
+        countItems(count);
+    });
+
+    // "active" tab
 
     activeItems = $.grep(allItems, function (x) {
         return x.completed == false;
@@ -243,21 +248,19 @@ $(function() {
     $("#activeList").css("display", "none");
 
     $("body").on("click", "#activeListBtn", function() {
-        $(this).addClass("active");
-        $("#allListBtn").removeClass("active");
-        $("#completedListBtn").removeClass("active");
+        $(this).addClass("blue");
+        $("#allListBtn").removeClass("blue");
+        $("#completedListBtn").removeClass("blue");
         
         $("#allList").css("display", "none");
         $("#completedList").css("display", "none");
         $("#activeList").slideDown();
 
         const count = activeItems.filter(x => x.completed == false).length;
-        if (count <= 1) {
-            $("#left").text(`${count} item left`);
-        } else {
-            $("#left").text(`${count} items left`);
-        };
+        countItems(count);
     });
+
+    // "completed" tab
 
     completedItems = $.grep(allItems, function (x) {
         return x.completed == true;
@@ -280,9 +283,9 @@ $(function() {
     $("#completedList").css("display", "none");
 
     $("body").on("click", "#completedListBtn", function() {
-        $(this).addClass("active");
-        $("#allListBtn").removeClass("active");
-        $("#activeListBtn").removeClass("active");
+        $(this).addClass("blue");
+        $("#allListBtn").removeClass("blue");
+        $("#activeListBtn").removeClass("blue");
         
         $("#allList").css("display", "none");
         $("#completedList").slideDown();
@@ -296,13 +299,37 @@ $(function() {
         };
     });
 
-    $("#allList").sortable();
-    $("#activeList").sortable();
-    $("#completedList").sortable();
+    // clear completed
+
+    $("body").on("click", "#clear", function() {
+        if (completedItems.length === 0) {
+            alert("There is no completed item to erase.")
+        } else if (confirm("Are you sure you want to clear completed items?")) {
+            allItems = $.grep(allItems, function (x) {
+                return x.completed != true;
+            });
+        };
+
+        const count = allItems.filter(x => x.completed == false).length;
+        countItems(count);
+
+        localStorage.setItem("all", JSON.stringify(allItems));
+        location.reload();
+    });
+
+    // dark and light mode toggle
 
     $("body").on("click", "header img", function toggleTheme() {
         
         $("html").toggleClass("dark");
+
+        let mode = $("html").hasClass("dark");
+
+        if (mode) {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
 
         const src = $("header img").attr("src");
         
@@ -318,4 +345,6 @@ $(function() {
             });
         }
     });
+
+    $("#allList, #activeList, #completedList").sortable();
 });

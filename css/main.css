@@ -35,69 +35,6 @@
   --desktop-bg: url(../images/bg-desktop-dark.jpg) no-repeat center top, #161722;
 }
 
-@media screen and (min-width: 768px) {
-  html {
-    font-size: 12px;
-  }
-  body {
-    background: var(--desktop-bg);
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  html {
-    font-size: 15px;
-  }
-  body {
-    padding-top: 6rem;
-  }
-  main input {
-    font-size: 1.2rem;
-  }
-  main ul li, main #lists-mobile li {
-    display: -ms-grid;
-    display: grid;
-    -ms-grid-columns: 24px 1fr 18px;
-        grid-template-columns: 24px 1fr 18px;
-  }
-  main ul li:hover .cross, main #lists-mobile li:hover .cross {
-    opacity: 1;
-  }
-  main ul li .cross, main #lists-mobile li .cross {
-    width: 18px;
-    opacity: 0;
-  }
-  main #info {
-    font-size: .9rem;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    padding: 1.2rem 2rem;
-  }
-  main #lists-desktop {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    list-style: none;
-  }
-  main #lists-desktop li {
-    font-size: 1rem;
-  }
-  main #lists-desktop li:hover {
-    cursor: pointer;
-    color: var(--v-d-grayish-blue);
-  }
-  main #lists-desktop li:nth-of-type(2) {
-    margin: 0 1rem;
-  }
-  main #lists-mobile {
-    display: none;
-  }
-  main #drag {
-    font-size: .9rem;
-  }
-}
-
 html {
   font-size: 10px;
 }
@@ -139,6 +76,10 @@ header img {
   width: 2rem;
 }
 
+header #sun {
+  display: none;
+}
+
 main {
   max-width: 540px;
   margin: auto;
@@ -156,17 +97,21 @@ main #newItem {
           align-items: center;
 }
 
-main .circle, main #inputCircle {
+main #inputCircle, main .circle {
   display: inline-block;
   width: 24px;
   height: 24px;
   border: 1px solid var(--v-l-grayish-blue);
   border-radius: 50%;
-  margin-right: 1rem;
+  margin-right: .7rem;
 }
 
-main .circle:hover, main #inputCircle:hover {
+main .circle:hover {
   cursor: pointer;
+  border: 1px solid transparent;
+  background-image: linear-gradient(white, white), linear-gradient(135deg, var(--check-bg-blue), var(--check-bg-purple));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
 }
 
 main input {
@@ -177,16 +122,17 @@ main input {
   padding: 1rem .5rem;
   width: 90%;
   background: var(--bg);
+  color: var(--v-d-grayish-blue);
 }
 
-main ul, main #lists-mobile {
+main ul, main #lists {
   list-style: none;
   background: var(--bg);
   border-radius: .5rem .5rem 0 0;
   margin-top: 1.8rem;
 }
 
-main ul li, main #lists-mobile li {
+main ul li, main #lists li {
   padding: 1.5rem 2rem;
   font-size: 1.2rem;
   display: -ms-grid;
@@ -201,12 +147,16 @@ main ul li, main #lists-mobile li {
   border-bottom: 1px solid var(--l-grayish-blue);
 }
 
-main ul li p:hover, main #lists-mobile li p:hover {
+main ul li p:hover, main #lists li p:hover {
   cursor: pointer;
 }
 
-main ul li .cross, main #lists-mobile li .cross {
+main ul li .cross, main #lists li .cross {
   width: 12px;
+}
+
+main ul li .cross:hover, main #lists li .cross:hover {
+  cursor: pointer;
 }
 
 main #info {
@@ -223,11 +173,7 @@ main #info {
   border-radius: 0 0 .5rem .5rem;
 }
 
-main #lists-desktop {
-  display: none;
-}
-
-main #lists-mobile {
+main #lists {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -237,7 +183,7 @@ main #lists-mobile {
   border-radius: .5rem;
 }
 
-main #lists-mobile li {
+main #lists li {
   display: inline-block;
   padding: 2rem .5rem;
   border-bottom: none;
@@ -245,7 +191,7 @@ main #lists-mobile li {
   color: var(--d-grayish-blue);
 }
 
-main #lists-mobile li:hover {
+main #lists li:hover {
   cursor: pointer;
   color: var(--v-d-grayish-blue);
 }
@@ -282,15 +228,6 @@ footer .attribution a {
   background: url(../images/icon-check.svg) no-repeat center center, linear-gradient(135deg, var(--check-bg-blue), var(--check-bg-purple)) !important;
 }
 
-.check img {
-  width: 10px;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-}
-
 .line {
   text-decoration: line-through;
   -webkit-text-decoration-color: var(--d-grayish-blue);
@@ -298,8 +235,8 @@ footer .attribution a {
   color: var(--l-grayish-blue);
 }
 
-.active {
-  color: var(--blue);
+.blue {
+  color: var(--blue) !important;
 }
 
 @media screen and (min-width: 768px) {
@@ -321,16 +258,16 @@ footer .attribution a {
   main input {
     font-size: 1.2rem;
   }
-  main ul li, main #lists-mobile li {
+  main ul li, main #lists li {
     display: -ms-grid;
     display: grid;
     -ms-grid-columns: 24px 1fr 18px;
         grid-template-columns: 24px 1fr 18px;
   }
-  main ul li:hover .cross, main #lists-mobile li:hover .cross {
+  main ul li:hover .cross, main #lists li:hover .cross {
     opacity: 1;
   }
-  main ul li .cross, main #lists-mobile li .cross {
+  main ul li .cross, main #lists li .cross {
     width: 18px;
     opacity: 0;
   }
@@ -341,24 +278,25 @@ footer .attribution a {
             align-items: center;
     padding: 1.2rem 2rem;
   }
-  main #lists-desktop {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    list-style: none;
+  main #lists {
+    padding: 0;
+    margin: 0;
+    width: 180px;
+    position: relative;
+    bottom: 2rem;
+    left: 50%;
+    -webkit-transform: translate(-50%, -8%);
+            transform: translate(-50%, -8%);
   }
-  main #lists-desktop li {
-    font-size: 1rem;
+  main #lists li {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    font-size: .9rem;
   }
-  main #lists-desktop li:hover {
+  main #lists li:hover {
     cursor: pointer;
     color: var(--v-d-grayish-blue);
-  }
-  main #lists-desktop li:nth-of-type(2) {
-    margin: 0 1rem;
-  }
-  main #lists-mobile {
-    display: none;
   }
   main #drag {
     font-size: .9rem;
